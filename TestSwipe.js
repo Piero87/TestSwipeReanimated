@@ -73,6 +73,11 @@ class SwipeRow extends React.Component {
   startX = new Value(0);
   isRemoving = new Value(-1);
 
+  onOpenCallback = () => {
+    console.log("OPEN");
+    this.props.onOpen();
+  };
+
   onHandlerStateChange = event([
     {
       nativeEvent: ({ state }) =>
@@ -138,6 +143,7 @@ class SwipeRow extends React.Component {
                   cond(this.animState.finished, [
                     stopClock(this.clock2),
                     set(this.animState.finished, 0),
+                    call([], () => this.onOpenCallback())
                   ]),
                 ]),
               ])
