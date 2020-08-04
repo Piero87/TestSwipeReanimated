@@ -28,6 +28,7 @@ const {
   add,
   timing,
   Clock,
+  Code
 } = Animated;
 
 const BUTTON_WIDTH = 75;
@@ -150,7 +151,7 @@ class SwipeRow extends React.Component {
               ])
             }
           </Animated.Code>
-          <Animated.Code exec={
+          <Code exec={
             () =>
               block([
                 call([this.shouldTriggerCallback], () => this.onOpenCallback()),
