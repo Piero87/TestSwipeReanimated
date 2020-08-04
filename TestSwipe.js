@@ -48,7 +48,7 @@ const Button = ({ item, marginRight, onPress }) => {
 };
 
 const springConfig = toValue => {
-  
+
   return {
     toValue: new Value(toValue),
     stiffness: 1000,
@@ -72,6 +72,7 @@ class SwipeRow extends React.Component {
   };
   startX = new Value(0);
   isRemoving = new Value(-1);
+  shouldTriggerCallback = new Value(0);
 
   onOpenCallback = () => {
     console.log("OPEN");
@@ -106,12 +107,12 @@ class SwipeRow extends React.Component {
             cond(and(greaterOrEq(velocityX, -20), not(clockRunning(this.clock))), [
               startClock(this.clock)
             ])
-            
+
           ])
         ]),
     },
   ]);
-  
+
   render() {
     const { children, buttons } = this.props;
     return (
@@ -143,12 +144,18 @@ class SwipeRow extends React.Component {
                   cond(this.animState.finished, [
                     stopClock(this.clock2),
                     set(this.animState.finished, 0),
-                    call([], () => this.onOpenCallback())
+                    set(this.shouldTriggerCallback, 1)
                   ]),
                 ]),
               ])
             }
           </Animated.Code>
+          <Animated.Code exec={
+            () =>
+              block([
+                call([this.shouldTriggerCallback], () => this.onOpenCallback()),
+                set(this.shouldTriggerCallback, 0)])}
+          />
           {children}
           <View style={{ ...s.buttonsContainer, width: (BUTTON_WIDTH * buttons.length) }}>
             {
